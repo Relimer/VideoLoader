@@ -1,0 +1,74 @@
+{
+  "name": "package",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Cross-platform video downloader and organizer",
+  "author": {
+    "name": "Relimer",
+    "email": "relimerofficial@gmail.com",
+    "url": "https://github.com/Relimer"
+  },
+  "main": "dist/main/main.js",
+  "type": "module",
+  "scripts": {
+    "vite": "vite",
+    "electron": "electron .",
+    "start-dev": "cross-env NODE_ENV=development concurrently \"vite\" \"electron src/main/main.js\"",
+    "start-prod": "cross-env NODE_ENV=production electron dist/main/main.js",
+    "clean": "rimraf dist",
+    "build:renderer": "tsc -b && vite build",
+    "build:preload": "esbuild src/preload/preload.cjs --bundle --platform=node --format=cjs --outfile=dist/preload/preload.cjs --external:*",
+    "build:main": "esbuild src/main/main.js --bundle --platform=node --outdir=dist/main --format=esm --external:*",
+    "build": "npm run clean && npm run build:main && npm run build:preload && npm run build:renderer",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "net.github.relimer.videoloader",
+    "productName": "VideoLoader",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@electron/fuses": "^1.8.0",
+    "@eslint/js": "^9.29.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react-swc": "^3.10.2",
+    "concurrently": "^9.2.0",
+    "cross-env": "^7.0.3",
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "rimraf": "^6.0.1",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.34.1",
+    "vite": "^7.0.0"
+  }
+}
